@@ -1,0 +1,85 @@
+{
+  // Waybar at top layer
+  "layer": "top",
+  "reload_on_style_change": true,
+
+  // Waybar position (top|bottom|left|right)
+  "position": "top",
+
+  // Waybar height (to be removed for auto height)
+  // "height": 10,
+
+  "passthrough": false,
+  "reload_style_on_change": true,
+
+  // Gaps between modules (4px)
+  "spacing": 10,
+
+  // Gap from the top of the screen
+  "margin-top": 0,
+  "margin-left": 0,
+  "margin-right": 0,
+  "margin-bottom": 1,
+
+  // Choose the order of the modules
+  "modules-left": ["custom/icon", "hyprland/window"],
+  "modules-center": ["hyprland/workspaces"],
+  "modules-right": ["tray", "clock"],
+
+  "custom/icon": {
+    "format": ""
+  },
+
+  "hyprland/window": {
+    "separate-outputs": true,
+    //"max-length": 20,
+    "format": "{class}",
+    "rewrite": {
+      // if any window is focused display Finder
+      "": "Kel'thuzad",
+      "kitty": "Kel'thuzad",
+      "vesktop": "Discord",
+      "zen": "Browser"
+    }
+  },
+
+  // Per-module config
+  "hyprland/workspaces": {
+    "disable-scroll": true,
+    "on-click": "activate",
+    "format": "{icon}",
+    "format-icons": {
+      "1": "i",
+      "2": "ii",
+      "3": "iii",
+      "4": "iv",
+      "5": "v",
+      "6": "i",
+      "7": "ii",
+      "8": "iii",
+      "9": "iv",
+      "10": "v"
+    }
+  },
+
+  "tray": {
+    "icon-size": 16,
+    "spacing": 5,
+    "show-passive-items": true
+  },
+
+  "clock": {
+    "format": "<span></span>  {:%H:%M}",
+    "interval": 1,
+    "tooltip-format": "<tt>{calendar}</tt>",
+    "calendar": {
+      "format": {
+        "today": "<span color='#eed49f'><b>{}</b></span>"
+      }
+    },
+    "actions": {
+      "on-click-right": "shift_down",
+      "on-click": "shift_up"
+    }
+  }
+}
