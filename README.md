@@ -1,87 +1,134 @@
-# Passo a Passo
+# Instalação e Configuração de um Ambiente de Desenvolvimento Moderno com Arch Linux e Hyprland
 
-## Instalação do Arch Linux com `archinstall`
+> Oficina apresentada na **SECOMP 2025 – IFMS Campus Nova Andradina**
+
+- Introdução
+  - [Por que Linux?](#por-que-linux)
+  - [Por que Arch Linux?](#por-que-arch-linux)
+  - [Arch Wiki](#arch-wiki)
+  - [Arch User Repository (AUR)](#arch-user-repository-aur)
+  - [Pacman vs Apt](#pacman-vs-apt)
+- Instalação
+  - [Instalação do Arch Linux com archinstall](#instalação-do-arch-linux-com-archinstall)
+  - [Etapas do archinstall](#etapas-do-archinstall)
+- Configuração
+  - [Configurações Pós-Instalação](#configurações-pós-instalação)
+  - [Instalando o Hyprland](#instalando-o-hyprland)
+  - [Shell, Git e AUR](#shell-git-e-aur)
+  - [Git](#git)
+  - [Zsh + Oh My Zsh](#zsh--oh-my-zsh)
+  - [Yay (AUR)](#yay-aur)
+  - [Personalização do Ambiente](#personalização-do-ambiente)
+  - [Clonando Configurações](#clonando-configurações)
+  - [VSCode](#vscode)
+  - [Ajustes Importantes no hyprland.conf](#ajustes-importantes-no-hyprlandconf)
+  - [Modo Escuro do Sistema](#modo-escuro-do-sistema)
+  - [Gaps, teclado, atalhos e animações](#gaps-teclado-atalhos-e-animações)
+
+---
+
+## **Por que Linux?**
+
+Linux é a base de grande parte da infraestrutura tecnológica moderna: servidores, nuvem, containers, dispositivos embarcados, supercomputadores e até o Android. Para desenvolvimento, trabalhar em Linux significa usar o mesmo ecossistema dominante no mercado — com ferramentas nativas poderosas, automação simples e um ambiente altamente estável e seguro.
+
+Outro ponto fundamental é a filosofia **open source**. O usuário pode auditar, modificar e adaptar praticamente tudo, reduzindo limitações e permitindo um entendimento muito mais profundo do funcionamento do sistema operacional.
+
+## **Por que Arch Linux?**
+
+O Arch Linux segue a filosofia **KISS ("Keep It Simple, Stupid")**, oferecendo um sistema minimalista, transparente, configurável e altamente modular. Ele não impõe decisões ao usuário.
+
+Além disso, seu modelo **rolling release** garante acesso contínuo a kernels, drivers e ferramentas de desenvolvimento sempre atualizados, na minha opinião pessoal, ideal para programadores.
+
+## **Arch Wiki**
+
+A **Arch Wiki** é uma das documentações mais completas e respeitadas do mundo Linux. Ela não apenas ensina conceitos relevantes ao ecossistema do Arch Linux, mas sim a todas as distribuições Linux e sistemas baseados em Unix.
+
+É um incentivo à autonomia, aprendizado profundo e compreensão real do sistema.
+
+## **Pacman vs Apt**
+
+O **pacman** (Arch) e o **apt** (Debian/Ubuntu) são gerenciadores de pacotes eficientes, porém com filosofias distintas. O pacman é **rápido, direto e previsível**, refletindo o minimalismo do Arch.
+
+A diferença prática aparece no fluxo de instalação. Em sistemas baseados em **apt**, muitos softwares exigem várias etapas extras — como adicionar repositórios externos, importar chaves GPG e atualizar índices.
+
+Um exemplo clássico é o **Docker**, cuja instalação oficial no Ubuntu segue diversos passos adicionais ([guia oficial](https://docs.docker.com/engine/install/ubuntu/)). Já no Arch, raramente a instalação irá muito além de um único comando:
+
+```bash
+sudo pacman -S docker
+```
+
+Essa simplicidade torna o Arch mais prático e previsível para desenvolvimento.
+
+## **Arch User Repository (AUR)**
+
+O **AUR** é um repositório comunitário com milhares de pacotes extras, incluindo ferramentas de nicho e versões alternativas de programas populares. Em vez de distribuir binários, o AUR utiliza **PKGBUILDs**, que funcionam como receitas para construir pacotes localmente.
+
+Isso mantém o sistema transparente, auditável e extremamente flexível. A combinação **Arch + AUR** é um dos maiores diferenciais da distribuição, ampliando significativamente a disponibilidade de software.
+
+## **Instalação do Arch Linux com `archinstall`**
 
 1. **Baixar ISO**
 
-2. Podemos usar o `Installation_guide` para ver a wiki e seguirmos com a instalação manualmente. Contudo, por razões de agilidade, vamos utilizar um script que já vem nas ISOs do Arch Linux chamado **archinstall**.  
-   Ele faz a configuração básica de acordo com nossas opções, deixando o processo de instalação parecido com o de outros sistemas operacionais.
+2. Embora seja possível seguir o `Installation_guide` e realizar a instalação manual, vamos utilizar o instalador interativo **archinstall**, que acelera o processo e garante uma base consistente.
 
-   > Para aumentar a fonte no TTY e facilitar a leitura:
+> Para aumentar o tamanho da fonte no TTY:
 
-   ```bash
-   ls /usr/share/kbd/consolefonts/
-   setfont ter-118b
-   ```
+```bash
+ls /usr/share/kbd/consolefonts/
+setfont ter-118b
+```
 
-Antes de executar o `archinstall`, vamos configurar o gerenciador de pacotes do Arch, o **pacman**.
-
-Abra o arquivo de configuração:
+Antes de rodar o `archinstall`, configure o **pacman**:
 
 ```bash
 nano /etc/pacman.conf
 ```
 
-Aqui, vamos permitir **10 downloads paralelos** (o padrão é 5) e, opcionalmente, habilitar `Color` e `ILoveCandy` por estética.
+Ative **10 downloads paralelos**, `Color` e, opcionalmente, `ILoveCandy`.
 
-Atualize e instale o script:
+Atualize e instale:
 
 ```bash
 pacman -Sy archinstall
-```
-
-Agora podemos rodar o script:
-
-```bash
 archinstall
 ```
 
-### Etapas de configuração no archinstall
+### **Etapas do `archinstall`**
 
-- **Archinstall language:** linguagem do instalador (usarei inglês).
-- **Locales:** deixarei `en_US` e `us` pois meu teclado é americano.
-- **Mirrors and repositories:** adicionar o mirror do **Brazil** e habilitar o repositório **multilib** (para suporte a apps 32 bits).
-- **Disk:** selecionar o disco para instalação (no meu caso, um disco virtual).
-- **Partitioning:** `automatic`.
-- **Filesystem:** `ext4`.
-- **Swap:** `enable`.
-- **Bootloader:** `GRUB`, por ser mais comum.
-- **Hostname:** `archvm`.
-- **Authentication:** criar um usuário normal e senha de root.
-- **Profile:** `minimal` (não selecionarei desktop automático para aprendermos o processo completo).
-- **Applications:** usar **Pipewire** como servidor de áudio.
-  - Bluetooth: deixarei desabilitado, mas pode ser ativado se necessário.
-- **Kernels:** `linux` (poderíamos escolher `linux-lts` por estabilidade).
-- **Network Configuration:** `NetworkManager`.
-- **Timezone:** `America/Campo_Grande`.
-- **NTP:** habilitado.
+- **Language:** inglês
+- **Locales:** `en_US` + layout `us` (utilizo teclado no padrão US, então escolho essa opção)
+- **Mirrors:** Brasil + habilitar **multilib**
+- **Disk:** selecionar o disco
+- **Partitioning:** automático
+- **Filesystem:** `ext4` ou `btrfs`
+- **Swap:** habilitado
+- **Bootloader:** `GRUB`
+- **Hostname:** `archvm`
+- **Authentication:** criar usuário + senha root
+- **Profile:** `minimal`
+- **Applications:** `Pipewire`
+- **Kernel:** `linux`
+- **Network:** `NetworkManager`
+- **Timezone:** `America/Campo_Grande`
+- **NTP:** habilitado
 
-Após configurar tudo, salve (opcionalmente) o JSON de configuração e confirme a instalação.  
-O script instalará os pacotes, configurará o sistema, o bootloader e criará os usuários. Quando terminar, reinicie o sistema.
+Após concluir a configuração, confirme e aguarde a instalação. Reinicie o sistema.
 
-> Em máquinas reais, remova o pendrive/DVD antes de reiniciar para evitar bootar pela ISO novamente. Na VM que eu criei, basta reiniciar normalmente.
+## **Configurações Pós-Instalação**
 
----
+Faça login e execute:
 
-## Configurações pós-instalação
+```bash
+sudo pacman -Syyuu
+```
 
-O sistema abrirá no GRUB. Faça login com o usuário criado e siga os passos abaixo:
+Instale fontes e drivers conforme o hardware:
 
-1. **Atualizar o sistema**
+```bash
+sudo pacman -S noto-fonts
+```
 
-   ```bash
-   sudo pacman -Syu
-   ```
-
-2. **Instalar drivers de vídeo**  
-   Em VMs normalmente não é necessário, mas em hardware real instale os drivers adequados (Intel, AMD, Nvidia).
-
-3. **Instalar ambiente gráfico e fontes básicas**
-   ```bash
-   sudo pacman -S noto-fonts
-   ```
-
-### Instalando o Hyprland
+## **Instalando o Hyprland e o Ambiente Visual**
 
 Pacotes essenciais:
 
@@ -89,79 +136,53 @@ Pacotes essenciais:
 sudo pacman -S hyprland kitty firefox nano
 ```
 
-Inicie o Hyprland:
+Utilize o comando `hyprland` para iniciar o hyprland e verificar se há algum problema na instalação:
 
 ```bash
 hyprland
 ```
 
-Se a resolução estiver incorreta, saia do hyprland com `Super + M` e edite o arquivo de configuração:
+Se tudo der certo, use o atalho de teclas **Super + Q** para sair e ajuste sua resolução:
+
+> **Super** é a tecla Windows!
 
 ```bash
 nano ~/.config/hypr/hyprland.conf
 ```
 
-Modifique a seção de monitor para a resolução correta, por exemplo:
-
 ```ini
 monitor=,1920x1080,0x0,1
 ```
 
-Salve com `CTRL + O`, confirme com `ENTER` e saia com `CTRL + X`.
-
-Reinicie o Hyprland:
+Recarregar:
 
 ```bash
 hyprland
 ```
 
-Use `Super + Q` para abrir novos terminais **kitty**.  
-Agora já temos um ambiente funcional com navegador, terminal e editor de texto, leve e eficiente.
+Use **Super + Q** para abrir terminais.
 
----
+## **Shell, Git e AUR**
 
-## Shell, Git e Gerenciador de Pacotes AUR
-
-### Instalando Git
-
-O Git é essencial para controle de versão e também necessário para instalar o `yay` (gerenciador de pacotes AUR).
+### **Git**
 
 ```bash
 sudo pacman -S git
 ```
-
-Configure seu Git com seus dados:
 
 ```bash
 git config --global user.name "Seu Nome"
 git config --global user.email "seu.email@example.com"
 ```
 
-### Instalando Zsh + Oh My Zsh
-
-O **Zsh** é um shell mais poderoso que o bash, com melhor completion e plugins. O **Oh My Zsh** é um framework que facilita a configuração.
+### **Zsh + Oh My Zsh**
 
 ```bash
 sudo pacman -S zsh
-```
-
-Instale o Oh My Zsh:
-
-```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
-Durante a instalação, ele perguntará se deseja fazer do Zsh o shell padrão. Responda `Y` (sim).
-
-#### Plugins Úteis para Oh My Zsh
-
-Edite o arquivo `~/.zshrc`:
-
-```bash
-nano ~/.zshrc
-```
-
-Encontre a linha `plugins=(git)` e substitua por:
+Plugins:
 
 ```bash
 plugins=(
@@ -175,102 +196,54 @@ plugins=(
 )
 ```
 
-Instale os plugins:
+Instalação dos plugins:
 
 ```bash
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-
 git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 ```
 
-Recarregue a configuração:
-
-```bash
-source ~/.zshrc
-```
-
-### Instalando Yay (Gerenciador de Pacotes AUR)
-
-O **Yay** permite instalar pacotes do **AUR (Arch User Repository)**, um repositório comunitário com muitos programas extras.
-
-Primeiro, clone o repositório do Yay onde desejar:
+### **Yay (AUR)**
 
 ```bash
 git clone https://aur.archlinux.org/yay.git
 cd yay
-
-# makepkg irá compilar e instalar o pacote
 makepkg -si
-
-# após executar o makepkg, podemos remover o diretório
 cd ..
 rm -rf yay
 ```
 
-Agora você pode usar `yay` para instalar pacotes do AUR:
+## **Personalização do Ambiente**
+
+### **Clonando Configurações**
 
 ```bash
-yay -S nome-do-pacote
-```
-
-> **Dica:** `yay` funciona igual a `pacman`, mas busca também no AUR. Você pode usar `yay -Syu` para atualizar o sistema inteiro (pacman + AUR). Efetivamente, o yay substitui o pacman para usuários que desejam usar o AUR.
-
----
-
-## Personalização do Ambiente
-
-### Clonando configurações básicas
-
-Esse é um passo totalmente opcional, apenas para acelerar nosso progresso!
-
-```bash
-# clonando esse repositório
 git clone https://github.com/caiohperlin/arch
 ```
 
-### Instalando o VSCode
+### **VSCode**
 
 ```bash
 sudo pacman -S code
 code ~/.config/hypr/hyprland.conf
 ```
 
-Recomendo instalar o tema **Catppuccin Mocha**, um dos mais populares na comunidade Linux.
+Recomendo **Catppuccin Mocha** como tema.
 
-### Wallpapers
+## **Ajustes Importantes no `hyprland.conf`**
 
-Remova os wallpapers padrão e copie os seus preferidos para o diretório de wallpapers do Hyprland.
+### **Modo Escuro do Sistema**
 
----
+```bash
+sudo pacman -S xdg-desktop-portal-gtk xdg-desktop-portal-hyprland qt6ct
+```
 
-## Ajustes Importantes no `hyprland.conf`
+```ini
+exec = gsettings set org.gnome.desktop.interface gtk-theme "adw-gtk3-dark"
+exec = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+env = QT_QPA_PLATFORMTHEME,qt6ct
+```
 
-1. **Configurar tema escuro do sistema:**
+### **Gaps, teclado, atalhos e animações**
 
-   Instale os pacotes necessários:
-
-   ```bash
-   sudo pacman -S xdg-desktop-portal-gtk xdg-desktop-portal-hyprland qt6ct
-   ```
-
-   Adicione ao `hyprland.conf`:
-
-   ```ini
-   ### SYSTEM = DARK MODE
-   exec = gsettings set org.gnome.desktop.interface gtk-theme "adw-gtk3-dark"
-   exec = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
-   env = QT_QPA_PLATFORMTHEME,qt6ct
-   ```
-
-2. **Ajustar gaps (espaços entre janelas e bordas)**  
-   Altere os valores conforme sua preferência — as mudanças refletem em tempo real.
-
-3. **Configurar layout e idioma do teclado**  
-   Ajuste para `pt-br` se necessário.
-
-4. **Personalizar atalhos de teclado**  
-   O Hyprland brilha nessa área — configure atalhos como preferir.  
-   O padrão é `Super + número` para trocar entre workspaces.
-
-5. **Animações (opcional)**  
-   Também podem ser personalizadas no mesmo arquivo.
+Ajuste livremente no mesmo arquivo.
