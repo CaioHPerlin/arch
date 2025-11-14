@@ -2,10 +2,6 @@
 
 > Oficina apresentada na **SECOMP 2025 – IFMS Campus Nova Andradina**
 
-# Instalação e Configuração de um Ambiente de Desenvolvimento Moderno com Arch Linux e Hyprland
-
-> Oficina apresentada na **SECOMP 2025 – IFMS Campus Nova Andradina**
-
 - Introdução
 
   - [Por que Linux?](#por-que-linux)
