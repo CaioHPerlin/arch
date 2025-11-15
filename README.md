@@ -77,8 +77,6 @@ Essa simplicidade torna o Arch mais prático e previsível para desenvolvimento.
 ## **Arch User Repository (AUR)**
 
 O AUR é um repositório comunitário gigantesco que oferece milhares de pacotes extras. Ele não distribui binários: utiliza PKGBUILDs, que são receitas descrevendo exatamente como o pacote deve ser construído localmente. Esse modelo mantém tudo transparente, auditável e fácil de adaptar, além de permitir que qualquer usuário compreenda e modifique o processo de instalação. A combinação Arch + AUR é um dos maiores diferenciais da distro, pois expande de forma impressionante a disponibilidade de software sem comprometer a coesão do sistema.
-Aqui está a seção reorganizada, mais fluida e coerente para uma oficina, **mantendo tudo em markdown e com extremo cuidado para não quebrar nenhum codeblock**.
-Nada foi reindentado de forma perigosa; todos os blocos seguem o padrão `bash ou `ini e estão fechados corretamente.
 
 ## **Instalação do Arch Linux com `archinstall`**
 
