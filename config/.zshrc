@@ -2,9 +2,15 @@
 bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
 bindkey "^[[3~" delete-char
+bindkey "^H" backward-kill-word
+bindkey "^[[3;5~" kill-word
+bindkey "^[[1;5D" backward-word
+bindkey "^[[1;5C" forward-word
 
 # aliases
 alias ls='ls --color=auto'
+alias s='kitten ssh'
+alias d2m-vpn-cerdil='sudo openfortivpn -c /etc/openfortivpn/tazy'
 
 # zinit
 ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
@@ -31,3 +37,12 @@ export NVM_HOME="$HOME/.nvm"
 
 # bin
 export PATH="$HOME/.local/bin:$PATH"
+
+
+# pnpm
+export PNPM_HOME="/home/perlin/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
